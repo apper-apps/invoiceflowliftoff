@@ -1,19 +1,35 @@
-import { useState, useEffect } from 'react'
-import { toast } from 'react-toastify'
-import { motion } from 'framer-motion'
-import Card from '@/components/atoms/Card'
-import Button from '@/components/atoms/Button'
-import Input from '@/components/atoms/Input'
-import Select from '@/components/atoms/Select'
-import Loading from '@/components/ui/Loading'
-import companyData from '@/services/mockData/company.json'
-import ApperIcon from '@/components/ApperIcon'
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
+import ApperIcon from "@/components/ApperIcon";
+import Select from "@/components/atoms/Select";
+import Card from "@/components/atoms/Card";
+import Input from "@/components/atoms/Input";
+import Button from "@/components/atoms/Button";
+import Loading from "@/components/ui/Loading";
 
 const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState('company')
   const [loading, setLoading] = useState(false)
-  const [companyInfo, setCompanyInfo] = useState(companyData)
-
+  const [companyInfo, setCompanyInfo] = useState({
+    Name: '',
+    email: '',
+    phone: '',
+    website: '',
+    address: '',
+    tax_details: JSON.stringify({
+      gst_no: '',
+      pan_no: '',
+      tax_rate: 0
+    }),
+    invoice_settings: JSON.stringify({
+      format: 'INV-{YYYY}-{NNN}',
+      next_number: 1,
+      default_payment_terms: 'Net 30',
+      currency: 'USD',
+      tax_label: 'Tax'
+    })
+  })
   const tabs = [
     { id: 'company', label: 'Company Info', icon: 'Building' },
     { id: 'invoice', label: 'Invoice Settings', icon: 'FileText' },
@@ -95,56 +111,58 @@ const SettingsPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Input
                       label="Company Name"
-                      value={companyInfo.name}
-                      onChange={(e) => setCompanyInfo(prev => ({ ...prev, name: e.target.value }))}
-                    />
-                    
-                    <Input
-                      label="Email Address"
-                      type="email"
-                      value={companyInfo.email}
-                      onChange={(e) => setCompanyInfo(prev => ({ ...prev, email: e.target.value }))}
-                    />
-                    
-                    <Input
-                      label="Phone Number"
-                      value={companyInfo.phone}
-                      onChange={(e) => setCompanyInfo(prev => ({ ...prev, phone: e.target.value }))}
-                    />
-                    
-                    <Input
-                      label="Website"
-                      value={companyInfo.website}
-                      onChange={(e) => setCompanyInfo(prev => ({ ...prev, website: e.target.value }))}
-                    />
-                  </div>
+value={companyInfo.Name}
+                    onChange={(e) => setCompanyInfo(prev => ({ ...prev, Name: e.target.value }))}
+                  />
                   
-                  <div>
-                    <Input
-                      label="Business Address"
-                      value={companyInfo.address}
-                      onChange={(e) => setCompanyInfo(prev => ({ ...prev, address: e.target.value }))}
-                    />
-                  </div>
+                  <Input
+                    label="Email Address"
+                    type="email"
+                    value={companyInfo.email}
+                    onChange={(e) => setCompanyInfo(prev => ({ ...prev, email: e.target.value }))}
+                  />
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input
-                      label="GST Number"
-                      value={companyInfo.taxDetails.gstNo}
-                      onChange={(e) => setCompanyInfo(prev => ({ 
-                        ...prev, 
-                        taxDetails: { ...prev.taxDetails, gstNo: e.target.value }
-                      }))}
-                    />
-                    
-                    <Input
-                      label="PAN Number"
-                      value={companyInfo.taxDetails.panNo}
-                      onChange={(e) => setCompanyInfo(prev => ({ 
-                        ...prev, 
-                        taxDetails: { ...prev.taxDetails, panNo: e.target.value }
-                      }))}
-                    />
+                  <Input
+                    label="Phone Number"
+                    value={companyInfo.phone}
+                    onChange={(e) => setCompanyInfo(prev => ({ ...prev, phone: e.target.value }))}
+                  />
+                  
+                  <Input
+                    label="Website"
+                    value={companyInfo.website}
+                    onChange={(e) => setCompanyInfo(prev => ({ ...prev, website: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <Input
+                    label="Business Address"
+                    value={companyInfo.address}
+                    onChange={(e) => setCompanyInfo(prev => ({ ...prev, address: e.target.value }))}
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input
+                    label="GST Number"
+                    value={JSON.parse(companyInfo.tax_details || '{}').gst_no || ''}
+                    onChange={(e) => {
+                      const taxDetails = JSON.parse(companyInfo.tax_details || '{}')
+                      taxDetails.gst_no = e.target.value
+                      setCompanyInfo(prev => ({ ...prev, tax_details: JSON.stringify(taxDetails) }))
+                    }}
+                  />
+                  
+                  <Input
+                    label="PAN Number"
+                    value={JSON.parse(companyInfo.tax_details || '{}').pan_no || ''}
+                    onChange={(e) => {
+                      const taxDetails = JSON.parse(companyInfo.tax_details || '{}')
+                      taxDetails.pan_no = e.target.value
+                      setCompanyInfo(prev => ({ ...prev, tax_details: JSON.stringify(taxDetails) }))
+                    }}
+                  />
                   </div>
                   
                   <div className="flex justify-end">
@@ -172,55 +190,59 @@ const SettingsPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Input
                       label="Invoice Number Format"
-                      value={companyInfo.invoiceSettings.format}
-                      onChange={(e) => setCompanyInfo(prev => ({ 
-                        ...prev, 
-                        invoiceSettings: { ...prev.invoiceSettings, format: e.target.value }
-                      }))}
-                      placeholder="e.g., INV-{YYYY}-{NNN}"
-                    />
-                    
-                    <Input
-                      label="Next Invoice Number"
-                      type="number"
-                      value={companyInfo.invoiceSettings.nextNumber}
-                      onChange={(e) => setCompanyInfo(prev => ({ 
-                        ...prev, 
-                        invoiceSettings: { ...prev.invoiceSettings, nextNumber: parseInt(e.target.value) }
-                      }))}
-                    />
-                    
-                    <Select
-                      label="Default Payment Terms"
-                      value={companyInfo.invoiceSettings.defaultPaymentTerms}
-                      onChange={(e) => setCompanyInfo(prev => ({ 
-                        ...prev, 
-                        invoiceSettings: { ...prev.invoiceSettings, defaultPaymentTerms: e.target.value }
-                      }))}
-                      options={[
-                        { value: 'Net 7', label: 'Net 7 Days' },
-                        { value: 'Net 15', label: 'Net 15 Days' },
-                        { value: 'Net 30', label: 'Net 30 Days' },
-                        { value: 'Net 45', label: 'Net 45 Days' },
-                        { value: 'Net 60', label: 'Net 60 Days' }
-                      ]}
-                    />
-                    
-                    <Select
-                      label="Currency"
-                      value={companyInfo.invoiceSettings.currency}
-                      onChange={(e) => setCompanyInfo(prev => ({ 
-                        ...prev, 
-                        invoiceSettings: { ...prev.invoiceSettings, currency: e.target.value }
-                      }))}
-                      options={[
-                        { value: 'USD', label: 'US Dollar (USD)' },
-                        { value: 'EUR', label: 'Euro (EUR)' },
-                        { value: 'GBP', label: 'British Pound (GBP)' },
-                        { value: 'INR', label: 'Indian Rupee (INR)' }
-                      ]}
-                    />
-                  </div>
+value={JSON.parse(companyInfo.invoice_settings || '{}').format || ''}
+                    onChange={(e) => {
+                      const invoiceSettings = JSON.parse(companyInfo.invoice_settings || '{}')
+                      invoiceSettings.format = e.target.value
+                      setCompanyInfo(prev => ({ ...prev, invoice_settings: JSON.stringify(invoiceSettings) }))
+                    }}
+                    placeholder="e.g., INV-{YYYY}-{NNN}"
+                  />
+                  
+                  <Input
+                    label="Next Invoice Number"
+                    type="number"
+                    value={JSON.parse(companyInfo.invoice_settings || '{}').next_number || ''}
+                    onChange={(e) => {
+                      const invoiceSettings = JSON.parse(companyInfo.invoice_settings || '{}')
+                      invoiceSettings.next_number = parseInt(e.target.value)
+                      setCompanyInfo(prev => ({ ...prev, invoice_settings: JSON.stringify(invoiceSettings) }))
+                    }}
+                  />
+                  
+                  <Select
+                    label="Default Payment Terms"
+                    value={JSON.parse(companyInfo.invoice_settings || '{}').default_payment_terms || ''}
+                    onChange={(e) => {
+                      const invoiceSettings = JSON.parse(companyInfo.invoice_settings || '{}')
+                      invoiceSettings.default_payment_terms = e.target.value
+                      setCompanyInfo(prev => ({ ...prev, invoice_settings: JSON.stringify(invoiceSettings) }))
+                    }}
+                    options={[
+                      { value: 'Net 7', label: 'Net 7 Days' },
+                      { value: 'Net 15', label: 'Net 15 Days' },
+                      { value: 'Net 30', label: 'Net 30 Days' },
+                      { value: 'Net 45', label: 'Net 45 Days' },
+                      { value: 'Net 60', label: 'Net 60 Days' }
+                    ]}
+                  />
+                  
+                  <Select
+                    label="Currency"
+                    value={JSON.parse(companyInfo.invoice_settings || '{}').currency || ''}
+                    onChange={(e) => {
+                      const invoiceSettings = JSON.parse(companyInfo.invoice_settings || '{}')
+                      invoiceSettings.currency = e.target.value
+                      setCompanyInfo(prev => ({ ...prev, invoice_settings: JSON.stringify(invoiceSettings) }))
+                    }}
+                    options={[
+                      { value: 'USD', label: 'US Dollar (USD)' },
+                      { value: 'EUR', label: 'Euro (EUR)' },
+                      { value: 'GBP', label: 'British Pound (GBP)' },
+                      { value: 'INR', label: 'Indian Rupee (INR)' }
+                    ]}
+                  />
+                </div>
                   
                   <div className="flex justify-end">
                     <Button
@@ -248,23 +270,25 @@ const SettingsPage = () => {
                     <Input
                       label="Default Tax Rate (%)"
                       type="number"
-                      value={companyInfo.taxDetails.taxRate}
-                      onChange={(e) => setCompanyInfo(prev => ({ 
-                        ...prev, 
-                        taxDetails: { ...prev.taxDetails, taxRate: parseFloat(e.target.value) }
-                      }))}
-                      step="0.01"
-                    />
-                    
-                    <Input
-                      label="Tax Label"
-                      value={companyInfo.invoiceSettings.taxLabel}
-                      onChange={(e) => setCompanyInfo(prev => ({ 
-                        ...prev, 
-                        invoiceSettings: { ...prev.invoiceSettings, taxLabel: e.target.value }
-                      }))}
-                      placeholder="e.g., GST, VAT, Tax"
-                    />
+value={JSON.parse(companyInfo.tax_details || '{}').tax_rate || ''}
+                    onChange={(e) => {
+                      const taxDetails = JSON.parse(companyInfo.tax_details || '{}')
+                      taxDetails.tax_rate = parseFloat(e.target.value)
+                      setCompanyInfo(prev => ({ ...prev, tax_details: JSON.stringify(taxDetails) }))
+                    }}
+                    step="0.01"
+                  />
+                  
+                  <Input
+                    label="Tax Label"
+                    value={JSON.parse(companyInfo.invoice_settings || '{}').tax_label || ''}
+                    onChange={(e) => {
+                      const invoiceSettings = JSON.parse(companyInfo.invoice_settings || '{}')
+                      invoiceSettings.tax_label = e.target.value
+                      setCompanyInfo(prev => ({ ...prev, invoice_settings: JSON.stringify(invoiceSettings) }))
+                    }}
+                    placeholder="e.g., GST, VAT, Tax"
+                  />
                   </div>
                   
                   <div className="bg-surface p-4 rounded-lg">
@@ -272,11 +296,11 @@ const SettingsPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <p className="text-sm text-secondary-600">GST Registration No.</p>
-                        <p className="font-medium text-secondary-900">{companyInfo.taxDetails.gstNo}</p>
+<p className="font-medium text-secondary-900">{JSON.parse(companyInfo.tax_details || '{}').gst_no || ''}</p>
                       </div>
                       <div>
                         <p className="text-sm text-secondary-600">PAN Number</p>
-                        <p className="font-medium text-secondary-900">{companyInfo.taxDetails.panNo}</p>
+                        <p className="font-medium text-secondary-900">{JSON.parse(companyInfo.tax_details || '{}').pan_no || ''}</p>
                       </div>
                     </div>
                   </div>

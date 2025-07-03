@@ -54,8 +54,8 @@ const InvoicesPage = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(invoice =>
-        invoice.invoiceNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        invoice.customerName.toLowerCase().includes(searchTerm.toLowerCase())
+invoice.invoice_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        invoice.customer_name.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
 
@@ -92,10 +92,10 @@ const InvoicesPage = () => {
   }
 
   const columns = [
-    { key: 'invoiceNo', label: 'Invoice No.', sortable: true },
-    { key: 'customerName', label: 'Customer', sortable: true },
+{ key: 'invoice_no', label: 'Invoice No.', sortable: true },
+    { key: 'customer_name', label: 'Customer', sortable: true },
     { key: 'date', label: 'Date', sortable: true },
-    { key: 'dueDate', label: 'Due Date', sortable: true },
+    { key: 'due_date', label: 'Due Date', sortable: true },
     { 
       key: 'total', 
       label: 'Amount', 
@@ -184,8 +184,8 @@ const InvoicesPage = () => {
         }
       >
         <p className="text-secondary-600">
-          Are you sure you want to delete invoice{' '}
-          <span className="font-semibold">{deleteModal.invoice?.invoiceNo}</span>?
+Are you sure you want to delete invoice{' '}
+          <span className="font-semibold">{deleteModal.invoice?.invoice_no}</span>?
           This action cannot be undone.
         </p>
       </Modal>

@@ -1,98 +1,324 @@
-import invoicesData from '@/services/mockData/invoices.json'
-
-let invoices = [...invoicesData]
-
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 export const invoiceService = {
   async getAll() {
-    await delay(300)
-    return [...invoices]
+    try {
+      await delay(300)
+      
+      const { ApperClient } = window.ApperSDK
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      })
+      
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "invoice_no" } },
+          { field: { Name: "date" } },
+          { field: { Name: "due_date" } },
+          { field: { Name: "customer_name" } },
+          { field: { Name: "items" } },
+          { field: { Name: "subtotal" } },
+          { field: { Name: "tax" } },
+          { field: { Name: "discount" } },
+          { field: { Name: "total" } },
+          { field: { Name: "status" } },
+          { field: { Name: "payments" } },
+          { field: { Name: "ref_no" } },
+          { field: { Name: "e_way_bill_no" } },
+          { field: { Name: "shipped_via" } },
+          { field: { Name: "shipping_date" } },
+          { field: { Name: "shipment_type" } },
+          { field: { Name: "customer_id" } }
+        ]
+      }
+      
+      const response = await apperClient.fetchRecords('app_invoice', params)
+      
+      if (!response.success) {
+        console.error(response.message)
+        throw new Error(response.message)
+      }
+      
+      return response.data || []
+    } catch (error) {
+      console.error("Error fetching invoices:", error)
+      throw error
+    }
   },
 
   async getById(id) {
-    await delay(200)
-    const invoice = invoices.find(inv => inv.Id === parseInt(id))
-    if (!invoice) {
-      throw new Error('Invoice not found')
+    try {
+      await delay(200)
+      
+      const { ApperClient } = window.ApperSDK
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      })
+      
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "invoice_no" } },
+          { field: { Name: "date" } },
+          { field: { Name: "due_date" } },
+          { field: { Name: "customer_name" } },
+          { field: { Name: "items" } },
+          { field: { Name: "subtotal" } },
+          { field: { Name: "tax" } },
+          { field: { Name: "discount" } },
+          { field: { Name: "total" } },
+          { field: { Name: "status" } },
+          { field: { Name: "payments" } },
+          { field: { Name: "ref_no" } },
+          { field: { Name: "e_way_bill_no" } },
+          { field: { Name: "shipped_via" } },
+          { field: { Name: "shipping_date" } },
+          { field: { Name: "shipment_type" } },
+          { field: { Name: "customer_id" } }
+        ]
+      }
+      
+      const response = await apperClient.getRecordById('app_invoice', parseInt(id), params)
+      
+      if (!response.success) {
+        console.error(response.message)
+        throw new Error(response.message)
+      }
+      
+      return response.data
+    } catch (error) {
+      console.error(`Error fetching invoice with ID ${id}:`, error)
+      throw error
     }
-    return { ...invoice }
   },
 
   async create(invoiceData) {
-    await delay(400)
-    const maxId = Math.max(...invoices.map(inv => inv.Id), 0)
-    const newInvoice = {
-      ...invoiceData,
-      Id: maxId + 1,
-      invoiceNo: this.generateInvoiceNumber(),
-      createdAt: new Date().toISOString()
+    try {
+      await delay(400)
+      
+      const { ApperClient } = window.ApperSDK
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      })
+      
+      // Map UI field names to database field names and filter only updateable fields
+      const recordData = {
+        Name: invoiceData.Name || `Invoice for ${invoiceData.customerName}`,
+        invoice_no: invoiceData.invoice_no || this.generateInvoiceNumber(),
+        date: invoiceData.date,
+        due_date: invoiceData.dueDate,
+        customer_name: invoiceData.customerName,
+        items: typeof invoiceData.items === 'string' ? invoiceData.items : JSON.stringify(invoiceData.items),
+        subtotal: invoiceData.subtotal,
+        tax: invoiceData.tax,
+        discount: invoiceData.discount,
+        total: invoiceData.total,
+        status: invoiceData.status,
+        payments: typeof invoiceData.payments === 'string' ? invoiceData.payments : JSON.stringify(invoiceData.payments || []),
+        ref_no: invoiceData.refNo,
+        e_way_bill_no: invoiceData.eWayBillNo,
+        shipped_via: invoiceData.shippedVia,
+        shipping_date: invoiceData.shippingDate,
+        shipment_type: invoiceData.shipmentType,
+        customer_id: parseInt(invoiceData.customerId)
+      }
+      
+      const params = {
+        records: [recordData]
+      }
+      
+      const response = await apperClient.createRecord('app_invoice', params)
+      
+      if (!response.success) {
+        console.error(response.message)
+        throw new Error(response.message)
+      }
+      
+      if (response.results) {
+        const failedRecords = response.results.filter(result => !result.success)
+        if (failedRecords.length > 0) {
+          console.error(`Failed to create ${failedRecords.length} records:${JSON.stringify(failedRecords)}`)
+          throw new Error(failedRecords[0].message || 'Failed to create invoice')
+        }
+        return response.results[0].data
+      }
+    } catch (error) {
+      console.error("Error creating invoice:", error)
+      throw error
     }
-    invoices.push(newInvoice)
-    return { ...newInvoice }
   },
 
   async update(id, invoiceData) {
-    await delay(300)
-    const index = invoices.findIndex(inv => inv.Id === parseInt(id))
-    if (index === -1) {
-      throw new Error('Invoice not found')
+    try {
+      await delay(300)
+      
+      const { ApperClient } = window.ApperSDK
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      })
+      
+      // Map UI field names to database field names and filter only updateable fields
+      const recordData = {
+        Id: parseInt(id),
+        Name: invoiceData.Name || `Invoice for ${invoiceData.customerName}`,
+        invoice_no: invoiceData.invoice_no,
+        date: invoiceData.date,
+        due_date: invoiceData.dueDate,
+        customer_name: invoiceData.customerName,
+        items: typeof invoiceData.items === 'string' ? invoiceData.items : JSON.stringify(invoiceData.items),
+        subtotal: invoiceData.subtotal,
+        tax: invoiceData.tax,
+        discount: invoiceData.discount,
+        total: invoiceData.total,
+        status: invoiceData.status,
+        payments: typeof invoiceData.payments === 'string' ? invoiceData.payments : JSON.stringify(invoiceData.payments || []),
+        ref_no: invoiceData.refNo,
+        e_way_bill_no: invoiceData.eWayBillNo,
+        shipped_via: invoiceData.shippedVia,
+        shipping_date: invoiceData.shippingDate,
+        shipment_type: invoiceData.shipmentType,
+        customer_id: parseInt(invoiceData.customerId)
+      }
+      
+      const params = {
+        records: [recordData]
+      }
+      
+      const response = await apperClient.updateRecord('app_invoice', params)
+      
+      if (!response.success) {
+        console.error(response.message)
+        throw new Error(response.message)
+      }
+      
+      if (response.results) {
+        const failedRecords = response.results.filter(result => !result.success)
+        if (failedRecords.length > 0) {
+          console.error(`Failed to update ${failedRecords.length} records:${JSON.stringify(failedRecords)}`)
+          throw new Error(failedRecords[0].message || 'Failed to update invoice')
+        }
+        return response.results[0].data
+      }
+    } catch (error) {
+      console.error("Error updating invoice:", error)
+      throw error
     }
-    invoices[index] = { ...invoices[index], ...invoiceData }
-    return { ...invoices[index] }
   },
 
   async delete(id) {
-    await delay(250)
-    const index = invoices.findIndex(inv => inv.Id === parseInt(id))
-    if (index === -1) {
-      throw new Error('Invoice not found')
+    try {
+      await delay(250)
+      
+      const { ApperClient } = window.ApperSDK
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      })
+      
+      const params = {
+        RecordIds: [parseInt(id)]
+      }
+      
+      const response = await apperClient.deleteRecord('app_invoice', params)
+      
+      if (!response.success) {
+        console.error(response.message)
+        throw new Error(response.message)
+      }
+      
+      if (response.results) {
+        const failedRecords = response.results.filter(result => !result.success)
+        if (failedRecords.length > 0) {
+          console.error(`Failed to delete ${failedRecords.length} records:${JSON.stringify(failedRecords)}`)
+          throw new Error(failedRecords[0].message || 'Failed to delete invoice')
+        }
+      }
+      
+      return true
+    } catch (error) {
+      console.error("Error deleting invoice:", error)
+      throw error
     }
-    invoices.splice(index, 1)
-    return true
   },
 
   async markAsPaid(id, paymentData) {
-    await delay(300)
-    const invoice = invoices.find(inv => inv.Id === parseInt(id))
-    if (!invoice) {
-      throw new Error('Invoice not found')
+    try {
+      await delay(300)
+      
+      // Get the current invoice first
+      const invoice = await this.getById(id)
+      if (!invoice) {
+        throw new Error('Invoice not found')
+      }
+      
+      // Parse current payments if they exist
+      let currentPayments = []
+      if (invoice.payments) {
+        try {
+          currentPayments = typeof invoice.payments === 'string' ? JSON.parse(invoice.payments) : invoice.payments
+        } catch (e) {
+          currentPayments = []
+        }
+      }
+      
+      // Add new payment
+      currentPayments.push({
+        ...paymentData,
+        date: new Date().toISOString().split('T')[0]
+      })
+      
+      // Calculate total payments
+      const totalPaid = currentPayments.reduce((sum, payment) => sum + (payment.amount || 0), 0)
+      const newStatus = totalPaid >= invoice.total ? 'paid' : 'partial'
+      
+      // Update the invoice
+      const updateData = {
+        ...invoice,
+        status: newStatus,
+        payments: currentPayments
+      }
+      
+      return await this.update(id, updateData)
+    } catch (error) {
+      console.error("Error marking invoice as paid:", error)
+      throw error
     }
-    
-    invoice.status = paymentData.amount >= invoice.total ? 'paid' : 'partial'
-    invoice.payments = invoice.payments || []
-    invoice.payments.push({
-      ...paymentData,
-      date: new Date().toISOString().split('T')[0]
-    })
-    
-    return { ...invoice }
   },
 
   generateInvoiceNumber() {
     const year = new Date().getFullYear()
-    const count = invoices.filter(inv => 
-      inv.invoiceNo.includes(year.toString())
-    ).length + 1
+    const count = Math.floor(Math.random() * 1000) + 1
     return `INV-${year}-${count.toString().padStart(3, '0')}`
   },
 
   async getMetrics() {
-    await delay(200)
-    const totalInvoices = invoices.length
-    const totalRevenue = invoices
-      .filter(inv => inv.status === 'paid')
-      .reduce((sum, inv) => sum + inv.total, 0)
-    const outstanding = invoices
-      .filter(inv => inv.status === 'pending' || inv.status === 'overdue')
-      .reduce((sum, inv) => sum + inv.total, 0)
-    const overdue = invoices.filter(inv => inv.status === 'overdue').length
+    try {
+      await delay(200)
+      
+      const invoices = await this.getAll()
+      const totalInvoices = invoices.length
+      const totalRevenue = invoices
+        .filter(inv => inv.status === 'paid')
+        .reduce((sum, inv) => sum + (inv.total || 0), 0)
+      const outstanding = invoices
+        .filter(inv => inv.status === 'pending' || inv.status === 'overdue')
+        .reduce((sum, inv) => sum + (inv.total || 0), 0)
+      const overdue = invoices.filter(inv => inv.status === 'overdue').length
 
-    return {
-      totalInvoices,
-      totalRevenue,
-      outstanding,
-      overdue
+      return {
+        totalInvoices,
+        totalRevenue,
+        outstanding,
+        overdue
+      }
+    } catch (error) {
+      console.error("Error fetching metrics:", error)
+      throw error
     }
   }
 }

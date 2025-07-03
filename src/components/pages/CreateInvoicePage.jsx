@@ -104,21 +104,21 @@ const CreateInvoicePage = () => {
   }
 
   const handleCustomerChange = (customerId) => {
-    const customer = customers.find(c => c.Id === parseInt(customerId))
+const customer = customers.find(c => c.Id === parseInt(customerId))
     setFormData(prev => ({
       ...prev,
       customerId,
-      customerName: customer ? customer.name : ''
+      customerName: customer ? customer.Name : ''
     }))
   }
 
-  const handleProductChange = (productId) => {
+const handleProductChange = (productId) => {
     const product = products.find(p => p.Id === parseInt(productId))
     if (product) {
       setNewItem(prev => ({
         ...prev,
         productId,
-        productName: product.name,
+        productName: product.Name,
         price: product.price,
         total: product.price * prev.quantity
       }))
@@ -207,14 +207,14 @@ const CreateInvoicePage = () => {
   if (loading) return <Loading type="form" />
   if (error) return <Error message={error} onRetry={loadData} />
 
-  const customerOptions = customers.map(customer => ({
+const customerOptions = customers.map(customer => ({
     value: customer.Id.toString(),
-    label: customer.name
+    label: customer.Name
   }))
 
   const productOptions = products.map(product => ({
     value: product.Id.toString(),
-    label: `${product.name} - $${product.price}`
+    label: `${product.Name} - $${product.price}`
   }))
 
   return (

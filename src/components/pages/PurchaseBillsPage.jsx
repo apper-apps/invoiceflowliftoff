@@ -48,8 +48,8 @@ const PurchaseBillsPage = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(bill =>
-        bill.billNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        bill.vendorName.toLowerCase().includes(searchTerm.toLowerCase())
+bill.bill_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        bill.vendor_name.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
 
@@ -61,10 +61,10 @@ const PurchaseBillsPage = () => {
   }, [bills, searchTerm, statusFilter])
 
   const columns = [
-    { key: 'billNo', label: 'Bill No.', sortable: true },
-    { key: 'vendorName', label: 'Vendor', sortable: true },
+{ key: 'bill_no', label: 'Bill No.', sortable: true },
+    { key: 'vendor_name', label: 'Vendor', sortable: true },
     { key: 'date', label: 'Date', sortable: true },
-    { key: 'dueDate', label: 'Due Date', sortable: true },
+    { key: 'due_date', label: 'Due Date', sortable: true },
     { 
       key: 'total', 
       label: 'Amount', 

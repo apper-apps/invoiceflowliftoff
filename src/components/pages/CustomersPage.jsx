@@ -53,9 +53,9 @@ const CustomersPage = () => {
   useEffect(() => {
     if (searchTerm) {
       const filtered = customers.filter(customer =>
-        customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+customer.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        customer.clientId.toLowerCase().includes(searchTerm.toLowerCase())
+        customer.client_id.toLowerCase().includes(searchTerm.toLowerCase())
       )
       setFilteredCustomers(filtered)
     } else {
@@ -64,7 +64,7 @@ const CustomersPage = () => {
   }, [customers, searchTerm])
 
   const resetForm = () => {
-    setFormData({
+setFormData({
       name: '',
       email: '',
       contactNo: '',
@@ -129,15 +129,15 @@ const CustomersPage = () => {
     }
   }
 
-  const columns = [
-    { key: 'clientId', label: 'Client ID', sortable: true },
-    { key: 'name', label: 'Customer Name', sortable: true },
-    { key: 'contactPerson', label: 'Contact Person', sortable: true },
+const columns = [
+    { key: 'client_id', label: 'Client ID', sortable: true },
+    { key: 'Name', label: 'Customer Name', sortable: true },
+    { key: 'contact_person', label: 'Contact Person', sortable: true },
     { key: 'email', label: 'Email', sortable: true },
-    { key: 'contactNo', label: 'Phone', sortable: true },
+    { key: 'contact_no', label: 'Phone', sortable: true },
     { key: 'state', label: 'State', sortable: true },
     { 
-      key: 'totalAmount', 
+      key: 'total_amount', 
       label: 'Total Business', 
       sortable: true,
       render: (value) => `$${value.toLocaleString()}`
@@ -215,7 +215,7 @@ const CustomersPage = () => {
             <Input
               label="Company Name"
               value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               required
             />
             
@@ -293,8 +293,8 @@ const CustomersPage = () => {
         }
       >
         <p className="text-secondary-600">
-          Are you sure you want to delete customer{' '}
-          <span className="font-semibold">{deleteModal.customer?.name}</span>?
+Are you sure you want to delete customer{' '}
+          <span className="font-semibold">{deleteModal.customer?.Name}</span>?
           This action cannot be undone.
         </p>
       </Modal>

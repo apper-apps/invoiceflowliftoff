@@ -1,62 +1,234 @@
-import billsData from '@/services/mockData/purchaseBills.json'
-
-let bills = [...billsData]
-
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 export const purchaseBillService = {
   async getAll() {
-    await delay(300)
-    return [...bills]
+    try {
+      await delay(300)
+      
+      const { ApperClient } = window.ApperSDK
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      })
+      
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "bill_no" } },
+          { field: { Name: "vendor_id" } },
+          { field: { Name: "vendor_name" } },
+          { field: { Name: "date" } },
+          { field: { Name: "due_date" } },
+          { field: { Name: "items" } },
+          { field: { Name: "subtotal" } },
+          { field: { Name: "tax" } },
+          { field: { Name: "discount" } },
+          { field: { Name: "total" } },
+          { field: { Name: "status" } },
+          { field: { Name: "ref_no" } }
+        ]
+      }
+      
+      const response = await apperClient.fetchRecords('purchase_bill', params)
+      
+      if (!response.success) {
+        console.error(response.message)
+        throw new Error(response.message)
+      }
+      
+      return response.data || []
+    } catch (error) {
+      console.error("Error fetching purchase bills:", error)
+      throw error
+    }
   },
 
   async getById(id) {
-    await delay(200)
-    const bill = bills.find(b => b.Id === parseInt(id))
-    if (!bill) {
-      throw new Error('Purchase bill not found')
+    try {
+      await delay(200)
+      
+      const { ApperClient } = window.ApperSDK
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      })
+      
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "bill_no" } },
+          { field: { Name: "vendor_id" } },
+          { field: { Name: "vendor_name" } },
+          { field: { Name: "date" } },
+          { field: { Name: "due_date" } },
+          { field: { Name: "items" } },
+          { field: { Name: "subtotal" } },
+          { field: { Name: "tax" } },
+          { field: { Name: "discount" } },
+          { field: { Name: "total" } },
+          { field: { Name: "status" } },
+          { field: { Name: "ref_no" } }
+        ]
+      }
+      
+      const response = await apperClient.getRecordById('purchase_bill', parseInt(id), params)
+      
+      if (!response.success) {
+        console.error(response.message)
+        throw new Error(response.message)
+      }
+      
+      return response.data
+    } catch (error) {
+      console.error(`Error fetching purchase bill with ID ${id}:`, error)
+      throw error
     }
-    return { ...bill }
   },
 
   async create(billData) {
-    await delay(400)
-    const maxId = Math.max(...bills.map(b => b.Id), 0)
-    const newBill = {
-      ...billData,
-      Id: maxId + 1,
-      billNo: this.generateBillNumber(),
-      createdAt: new Date().toISOString()
+    try {
+      await delay(400)
+      
+      const { ApperClient } = window.ApperSDK
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      })
+      
+      // Map UI field names to database field names and filter only updateable fields
+      const recordData = {
+        Name: billData.Name || `Purchase Bill from ${billData.vendorName}`,
+        bill_no: billData.billNo || this.generateBillNumber(),
+        vendor_id: billData.vendorId,
+        vendor_name: billData.vendorName,
+        date: billData.date,
+        due_date: billData.dueDate,
+        items: typeof billData.items === 'string' ? billData.items : JSON.stringify(billData.items),
+        subtotal: billData.subtotal,
+        tax: billData.tax,
+        discount: billData.discount,
+        total: billData.total,
+        status: billData.status,
+        ref_no: billData.refNo
+      }
+      
+      const params = {
+        records: [recordData]
+      }
+      
+      const response = await apperClient.createRecord('purchase_bill', params)
+      
+      if (!response.success) {
+        console.error(response.message)
+        throw new Error(response.message)
+      }
+      
+      if (response.results) {
+        const failedRecords = response.results.filter(result => !result.success)
+        if (failedRecords.length > 0) {
+          console.error(`Failed to create ${failedRecords.length} records:${JSON.stringify(failedRecords)}`)
+          throw new Error(failedRecords[0].message || 'Failed to create purchase bill')
+        }
+        return response.results[0].data
+      }
+    } catch (error) {
+      console.error("Error creating purchase bill:", error)
+      throw error
     }
-    bills.push(newBill)
-    return { ...newBill }
   },
 
   async update(id, billData) {
-    await delay(300)
-    const index = bills.findIndex(b => b.Id === parseInt(id))
-    if (index === -1) {
-      throw new Error('Purchase bill not found')
+    try {
+      await delay(300)
+      
+      const { ApperClient } = window.ApperSDK
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      })
+      
+      // Map UI field names to database field names and filter only updateable fields
+      const recordData = {
+        Id: parseInt(id),
+        Name: billData.Name,
+        bill_no: billData.billNo,
+        vendor_id: billData.vendorId,
+        vendor_name: billData.vendorName,
+        date: billData.date,
+        due_date: billData.dueDate,
+        items: typeof billData.items === 'string' ? billData.items : JSON.stringify(billData.items),
+        subtotal: billData.subtotal,
+        tax: billData.tax,
+        discount: billData.discount,
+        total: billData.total,
+        status: billData.status,
+        ref_no: billData.refNo
+      }
+      
+      const params = {
+        records: [recordData]
+      }
+      
+      const response = await apperClient.updateRecord('purchase_bill', params)
+      
+      if (!response.success) {
+        console.error(response.message)
+        throw new Error(response.message)
+      }
+      
+      if (response.results) {
+        const failedRecords = response.results.filter(result => !result.success)
+        if (failedRecords.length > 0) {
+          console.error(`Failed to update ${failedRecords.length} records:${JSON.stringify(failedRecords)}`)
+          throw new Error(failedRecords[0].message || 'Failed to update purchase bill')
+        }
+        return response.results[0].data
+      }
+    } catch (error) {
+      console.error("Error updating purchase bill:", error)
+      throw error
     }
-    bills[index] = { ...bills[index], ...billData }
-    return { ...bills[index] }
   },
 
   async delete(id) {
-    await delay(250)
-    const index = bills.findIndex(b => b.Id === parseInt(id))
-    if (index === -1) {
-      throw new Error('Purchase bill not found')
+    try {
+      await delay(250)
+      
+      const { ApperClient } = window.ApperSDK
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      })
+      
+      const params = {
+        RecordIds: [parseInt(id)]
+      }
+      
+      const response = await apperClient.deleteRecord('purchase_bill', params)
+      
+      if (!response.success) {
+        console.error(response.message)
+        throw new Error(response.message)
+      }
+      
+      if (response.results) {
+        const failedRecords = response.results.filter(result => !result.success)
+        if (failedRecords.length > 0) {
+          console.error(`Failed to delete ${failedRecords.length} records:${JSON.stringify(failedRecords)}`)
+          throw new Error(failedRecords[0].message || 'Failed to delete purchase bill')
+        }
+      }
+      
+      return true
+    } catch (error) {
+      console.error("Error deleting purchase bill:", error)
+      throw error
     }
-    bills.splice(index, 1)
-    return true
   },
 
   generateBillNumber() {
     const year = new Date().getFullYear()
-    const count = bills.filter(b => 
-      b.billNo.includes(year.toString())
-    ).length + 1
+    const count = Math.floor(Math.random() * 1000) + 1
     return `PB-${year}-${count.toString().padStart(3, '0')}`
   }
 }

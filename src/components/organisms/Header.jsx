@@ -84,7 +84,7 @@ const Header = ({ onMobileMenuClick, title }) => {
             )}
           </div>
 
-          <div className="flex items-center space-x-2">
+<div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-800 rounded-full flex items-center justify-center">
               <ApperIcon name="User" className="text-white" size={16} />
             </div>
@@ -92,6 +92,20 @@ const Header = ({ onMobileMenuClick, title }) => {
               <p className="text-sm font-medium text-secondary-900">Admin User</p>
               <p className="text-xs text-secondary-500">Administrator</p>
             </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              icon="LogOut"
+              onClick={() => {
+                if (window.confirm('Are you sure you want to logout?')) {
+                  const { ApperUI } = window.ApperSDK;
+                  ApperUI.logout();
+                }
+              }}
+              className="text-secondary-600 hover:text-red-600"
+            >
+              Logout
+            </Button>
           </div>
         </div>
       </div>

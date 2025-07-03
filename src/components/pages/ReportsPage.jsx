@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import Card from '@/components/atoms/Card'
-import Button from '@/components/atoms/Button'
-import Select from '@/components/atoms/Select'
-import MetricCard from '@/components/molecules/MetricCard'
-import Loading from '@/components/ui/Loading'
-import Error from '@/components/ui/Error'
-import { invoiceService } from '@/services/api/invoiceService'
-import ApperIcon from '@/components/ApperIcon'
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import ApperIcon from "@/components/ApperIcon";
+import Select from "@/components/atoms/Select";
+import Card from "@/components/atoms/Card";
+import Button from "@/components/atoms/Button";
+import MetricCard from "@/components/molecules/MetricCard";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import { invoiceService } from "@/services/api/invoiceService";
 
 const ReportsPage = () => {
   const [loading, setLoading] = useState(true)
@@ -174,13 +174,10 @@ const ReportsPage = () => {
         <Card className="p-6">
           <h3 className="text-lg font-semibold text-secondary-900 mb-6">Recent Invoice Activity</h3>
           
-          <div className="space-y-4">
+<div className="space-y-4">
             {reportData?.invoices?.slice(0, 5).map((invoice, index) => (
               <motion.div
-                key={invoice.Id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                key={invoice.id || index}
                 className="flex items-center justify-between p-3 bg-surface rounded-lg"
               >
                 <div className="flex items-center space-x-3">
@@ -188,8 +185,8 @@ const ReportsPage = () => {
                     <ApperIcon name="FileText" className="text-primary-600" size={16} />
                   </div>
                   <div>
-                    <p className="font-medium text-secondary-900">{invoice.invoiceNo}</p>
-                    <p className="text-sm text-secondary-500">{invoice.customerName}</p>
+                    <p className="font-medium text-secondary-900">{invoice.invoice_no}</p>
+                    <p className="text-sm text-secondary-500">{invoice.customer_name}</p>
                   </div>
                 </div>
                 <div className="text-right">

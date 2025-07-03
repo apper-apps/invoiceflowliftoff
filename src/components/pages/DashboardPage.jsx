@@ -146,8 +146,8 @@ const DashboardPage = () => {
                     <ApperIcon name="FileText" className="text-primary-600" size={20} />
                   </div>
                   <div>
-                    <p className="font-medium text-secondary-900">{invoice.invoiceNo}</p>
-                    <p className="text-sm text-secondary-500">{invoice.customerName}</p>
+<p className="font-medium text-secondary-900">{invoice.invoice_no}</p>
+                    <p className="text-sm text-secondary-500">{invoice.customer_name}</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -223,9 +223,9 @@ const DashboardPage = () => {
                     className={invoice.status === 'overdue' ? 'text-red-600' : 'text-amber-600'} 
                     size={20} 
                   />
-                  <div>
-                    <p className="font-medium text-secondary-900">{invoice.invoiceNo} - {invoice.customerName}</p>
-                    <p className="text-sm text-secondary-500">Due: {invoice.dueDate}</p>
+<div>
+                    <p className="font-medium text-secondary-900">{invoice.invoice_no} - {invoice.customer_name}</p>
+                    <p className="text-sm text-secondary-500">Due: {invoice.due_date}</p>
                   </div>
                 </div>
                 <div className="text-right">

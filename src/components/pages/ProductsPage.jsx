@@ -70,9 +70,9 @@ const ProductsPage = () => {
   useEffect(() => {
     if (searchTerm) {
       const filtered = products.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+product.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.hsnCode.includes(searchTerm)
+        product.hsn_code.includes(searchTerm)
       )
       setFilteredProducts(filtered)
     } else {
@@ -81,7 +81,7 @@ const ProductsPage = () => {
   }, [products, searchTerm])
 
   const resetForm = () => {
-    setFormData({
+setFormData({
       name: '',
       description: '',
       hsnCode: '',
@@ -146,9 +146,9 @@ const ProductsPage = () => {
   }
 
   const columns = [
-    { key: 'name', label: 'Product Name', sortable: true },
+{ key: 'Name', label: 'Product Name', sortable: true },
     { key: 'category', label: 'Category', sortable: true },
-    { key: 'hsnCode', label: 'HSN/SAC Code', sortable: true },
+    { key: 'hsn_code', label: 'HSN/SAC Code', sortable: true },
     { 
       key: 'price', 
       label: 'Price', 
@@ -157,7 +157,7 @@ const ProductsPage = () => {
     },
     { key: 'unit', label: 'Unit', sortable: true },
     { 
-      key: 'gstRate', 
+      key: 'gst_rate', 
       label: 'GST Rate', 
       sortable: true,
       render: (value) => `${value}%`
@@ -235,7 +235,7 @@ const ProductsPage = () => {
             <div className="md:col-span-2">
               <Input
                 label="Product Name"
-                value={formData.name}
+value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 required
               />
@@ -320,8 +320,8 @@ const ProductsPage = () => {
         }
       >
         <p className="text-secondary-600">
-          Are you sure you want to delete product{' '}
-          <span className="font-semibold">{deleteModal.product?.name}</span>?
+Are you sure you want to delete product{' '}
+          <span className="font-semibold">{deleteModal.product?.Name}</span>?
           This action cannot be undone.
         </p>
       </Modal>
