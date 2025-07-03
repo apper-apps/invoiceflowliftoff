@@ -1,0 +1,41 @@
+[
+  {
+    "Id": 1,
+    "name": "Tech Suppliers Inc",
+    "contactPerson": "James Anderson",
+    "email": "james@techsuppliers.com",
+    "phone": "+1-555-1001",
+    "address": "100 Supplier Street, Vendor City, VC 11111",
+    "gstNo": "11AAAAA0000A1Z1",
+    "panNo": "AAAAA1111A",
+    "category": "Software & Licenses",
+    "paymentTerms": "Net 30",
+    "isActive": true
+  },
+  {
+    "Id": 2,
+    "name": "Office Equipment Co",
+    "contactPerson": "Lisa Chen",
+    "email": "lisa@officeequip.com",
+    "phone": "+1-555-1002",
+    "address": "200 Equipment Avenue, Supply Town, ST 22222",
+    "gstNo": "22BBBBB1111B2Z2",
+    "panNo": "BBBBB2222B",
+    "category": "Hardware & Equipment",
+    "paymentTerms": "Net 15",
+    "isActive": true
+  },
+  {
+    "Id": 3,
+    "name": "Cloud Services Ltd",
+    "contactPerson": "David Kumar",
+    "email": "david@cloudservices.com",
+    "phone": "+1-555-1003",
+    "address": "300 Cloud Plaza, Service City, SC 33333",
+    "gstNo": "33CCCCC2222C3Z3",
+    "panNo": "CCCCC3333C",
+    "category": "Cloud & Hosting",
+    "paymentTerms": "Net 7",
+    "isActive": true
+  }
+]

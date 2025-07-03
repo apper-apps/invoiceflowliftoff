@@ -1,0 +1,90 @@
+[
+  {
+    "Id": 1,
+    "name": "Web Development Service",
+    "description": "Custom website development with responsive design",
+    "hsnCode": "998313",
+    "gstRate": 18,
+    "price": 5000,
+    "unit": "Project",
+    "category": "Services",
+    "isActive": true
+  },
+  {
+    "Id": 2,
+    "name": "Mobile App Development",
+    "description": "Native mobile application development for iOS and Android",
+    "hsnCode": "998313",
+    "gstRate": 18,
+    "price": 8000,
+    "unit": "Project",
+    "category": "Services",
+    "isActive": true
+  },
+  {
+    "Id": 3,
+    "name": "Software License",
+    "description": "Annual software license for business applications",
+    "hsnCode": "998313",
+    "gstRate": 18,
+    "price": 1200,
+    "unit": "License",
+    "category": "Software",
+    "isActive": true
+  },
+  {
+    "Id": 4,
+    "name": "Consulting Hours",
+    "description": "Technical consulting and advisory services",
+    "hsnCode": "998314",
+    "gstRate": 18,
+    "price": 150,
+    "unit": "Hour",
+    "category": "Services",
+    "isActive": true
+  },
+  {
+    "Id": 5,
+    "name": "Cloud Hosting",
+    "description": "Monthly cloud hosting with 99.9% uptime guarantee",
+    "hsnCode": "998314",
+    "gstRate": 18,
+    "price": 500,
+    "unit": "Month",
+    "category": "Services",
+    "isActive": true
+  },
+  {
+    "Id": 6,
+    "name": "Digital Marketing Package",
+    "description": "Comprehensive digital marketing and SEO services",
+    "hsnCode": "998315",
+    "gstRate": 18,
+    "price": 2500,
+    "unit": "Month",
+    "category": "Services",
+    "isActive": true
+  },
+  {
+    "Id": 7,
+    "name": "UI/UX Design",
+    "description": "User interface and experience design services",
+    "hsnCode": "998313",
+    "gstRate": 18,
+    "price": 3000,
+    "unit": "Project",
+    "category": "Services",
+    "isActive": true
+  },
+  {
+    "Id": 8,
+    "name": "Database Setup",
+    "description": "Database design, setup and optimization",
+    "hsnCode": "998313",
+    "gstRate": 18,
+    "price": 1800,
+    "unit": "Project",
+    "category": "Services",
+    "isActive": true
+  }
+]

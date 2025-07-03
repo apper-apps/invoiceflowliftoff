@@ -1,0 +1,26 @@
+{
+  "name": "InvoiceFlow Pro Solutions",
+  "logo": "/logo.png",
+  "address": "123 Business Avenue, Professional Plaza, Suite 456, Business City, BC 12345",
+  "email": "contact@invoiceflow.com",
+  "phone": "+1-555-INVOICE",
+  "website": "www.invoiceflow.com",
+  "taxDetails": {
+    "gstNo": "22AAAAA0000A1Z5",
+    "panNo": "AAAAA1111A",
+    "taxRate": 18
+  },
+  "invoiceSettings": {
+    "format": "INV-{YYYY}-{NNN}",
+    "nextNumber": 6,
+    "defaultPaymentTerms": "Net 30",
+    "currency": "USD",
+    "taxLabel": "GST"
+  },
+  "bankDetails": {
+    "bankName": "Business Bank",
+    "accountNumber": "1234567890",
+    "routingNumber": "123456789",
+    "accountHolder": "InvoiceFlow Pro Solutions"
+  }
+}

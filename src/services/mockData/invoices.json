@@ -1,0 +1,161 @@
+[
+  {
+    "Id": 1,
+    "invoiceNo": "INV-2024-001",
+    "date": "2024-01-15",
+    "dueDate": "2024-02-15",
+    "customerId": 1,
+    "customerName": "Acme Corporation",
+    "items": [
+      {
+        "id": 1,
+        "productId": 1,
+        "productName": "Web Development Service",
+        "quantity": 1,
+        "price": 5000,
+        "total": 5000
+      }
+    ],
+    "subtotal": 5000,
+    "tax": 900,
+    "discount": 0,
+    "total": 5900,
+    "status": "paid",
+    "payments": [
+      {
+        "amount": 5900,
+        "date": "2024-02-10",
+        "method": "Bank Transfer",
+        "transactionId": "TXN123456"
+      }
+    ],
+    "refNo": "PO-2024-001",
+    "eWayBillNo": "",
+    "shippedVia": "Self Delivery",
+    "shippingDate": "2024-01-20",
+    "shipmentType": "Interstate"
+  },
+  {
+    "Id": 2,
+    "invoiceNo": "INV-2024-002",
+    "date": "2024-01-20",
+    "dueDate": "2024-02-20",
+    "customerId": 2,
+    "customerName": "TechStart Ltd",
+    "items": [
+      {
+        "id": 1,
+        "productId": 2,
+        "productName": "Mobile App Development",
+        "quantity": 1,
+        "price": 8000,
+        "total": 8000
+      }
+    ],
+    "subtotal": 8000,
+    "tax": 1440,
+    "discount": 200,
+    "total": 9240,
+    "status": "pending",
+    "payments": [],
+    "refNo": "PO-2024-002",
+    "eWayBillNo": "EWB123456789",
+    "shippedVia": "Express Courier",
+    "shippingDate": "2024-01-25",
+    "shipmentType": "Intrastate"
+  },
+  {
+    "Id": 3,
+    "invoiceNo": "INV-2024-003",
+    "date": "2024-01-10",
+    "dueDate": "2024-01-25",
+    "customerId": 3,
+    "customerName": "Global Enterprises",
+    "items": [
+      {
+        "id": 1,
+        "productId": 3,
+        "productName": "Software License",
+        "quantity": 5,
+        "price": 1200,
+        "total": 6000
+      }
+    ],
+    "subtotal": 6000,
+    "tax": 1080,
+    "discount": 100,
+    "total": 6980,
+    "status": "overdue",
+    "payments": [
+      {
+        "amount": 3000,
+        "date": "2024-01-20",
+        "method": "Credit Card",
+        "transactionId": "TXN789012"
+      }
+    ],
+    "refNo": "SO-2024-003",
+    "eWayBillNo": "",
+    "shippedVia": "Digital Delivery",
+    "shippingDate": "2024-01-15",
+    "shipmentType": "Interstate"
+  },
+  {
+    "Id": 4,
+    "invoiceNo": "INV-2024-004",
+    "date": "2024-01-25",
+    "dueDate": "2024-02-25",
+    "customerId": 1,
+    "customerName": "Acme Corporation",
+    "items": [
+      {
+        "id": 1,
+        "productId": 4,
+        "productName": "Consulting Hours",
+        "quantity": 20,
+        "price": 150,
+        "total": 3000
+      }
+    ],
+    "subtotal": 3000,
+    "tax": 540,
+    "discount": 0,
+    "total": 3540,
+    "status": "draft",
+    "payments": [],
+    "refNo": "REQ-2024-004",
+    "eWayBillNo": "",
+    "shippedVia": "Not Applicable",
+    "shippingDate": "",
+    "shipmentType": "Intrastate"
+  },
+  {
+    "Id": 5,
+    "invoiceNo": "INV-2024-005",
+    "date": "2024-01-30",
+    "dueDate": "2024-02-28",
+    "customerId": 4,
+    "customerName": "Innovation Hub",
+    "items": [
+      {
+        "id": 1,
+        "productId": 5,
+        "productName": "Cloud Hosting",
+        "quantity": 12,
+        "price": 500,
+        "total": 6000
+      }
+    ],
+    "subtotal": 6000,
+    "tax": 1080,
+    "discount": 300,
+    "total": 6780,
+    "status": "pending",
+    "payments": [],
+    "refNo": "PO-2024-005",
+    "eWayBillNo": "EWB987654321",
+    "shippedVia": "Cloud Deployment",
+    "shippingDate": "2024-02-01",
+    "shipmentType": "Interstate"
+  }
+]
